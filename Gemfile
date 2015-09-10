@@ -40,6 +40,8 @@ gem "awesome_print"
 
 #Sidekiq for background processing
 gem "sidekiq"
+#For sending emails in the background
+gem "devise-async"
 
 gem 'rails_12factor', group: :production
 
