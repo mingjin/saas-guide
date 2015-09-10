@@ -35,6 +35,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 #Devise gem
 gem "devise"
 
+#Print ruby objects with color and indentation
+gem "awesome_print"
+
 gem 'rails_12factor', group: :production
 
 group :development, :test do
