@@ -7,9 +7,10 @@ class User < ActiveRecord::Base
   validate :email_is_unique, on: :create
   after_create :create_account
 
-  def confirmation_required?
-    false
-  end
+  # def confirmation_required?
+  #   false
+  # end
+  
 
   private
   #Email should be unique in Account model
