@@ -38,6 +38,9 @@ gem "devise"
 #Print ruby objects with color and indentation
 gem "awesome_print"
 
+#Sidekiq for background processing
+gem "sidekiq"
+
 gem 'rails_12factor', group: :production
 
 group :development, :test do
