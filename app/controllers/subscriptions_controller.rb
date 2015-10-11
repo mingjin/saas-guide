@@ -1,6 +1,6 @@
 class SubscriptionsController < ApplicationController
     before_filter :authenticate_user!
-    
+
     def new
         @plans = Plan.all
     end
@@ -21,6 +21,9 @@ class SubscriptionsController < ApplicationController
           :plan   => plan,
           :email  => email
         )
+
+     rescue => e 
+        redirect_to :new_subscription, :flash => {:error => e.message }
 
     end
 end
