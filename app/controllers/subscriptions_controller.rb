@@ -16,38 +16,80 @@ class SubscriptionsController < ApplicationController
 
     def create
         # Get the credit card details submitted by the form
-        token = params[:stripeToken]
+        token           = params[:stripeToken]
 
-        plan  = params[:plan][:stripe_id]
-        email = current_user.email
+        plan            = params[:plan][:stripe_id]
+        email           = current_user.email
+        current_account = Account.find_by_email(current_user.email)
+        customer_id     = current_account.customer_id
+        current_plan = current_account.stripe_plan_id
 
-        #Create a Customer
-        customer = Stripe::Customer.create(
-          :source => token,
-          :plan   => plan,
-          :email  => email
-        )
+        if customer_id.nil?
+            #New customer -> Create a customer
+            #Create a Customer
+            @customer = Stripe::Customer.create(
+              :source => token,
+              :plan   => plan,
+              :email  => email
+            )
+            
+            subscriptions    = @customer.subscriptions
+            @subscribed_plan = subscriptions.data.find{|o| o.plan.id == plan}
 
-        subscriptions = customer.subscriptions
-        subscribed_plan = subscriptions.data.find{|o| o.plan.id == plan}
+        else
+            #Customer exists
+            #Get customer from Stripe
+            @customer = Stripe::Customer.retrieve(customer_id)
+            @subscribed_plan = create_or_update_subscription(@customer, current_plan, plan)
+
+        end
+
         #Get current period end - This is a unix timestamp
-        current_period_end = subscribed_plan.current_period_end
+        current_period_end = @subscribed_plan.current_period_end
         #Convert to datetime
         active_until = Time.at(current_period_end).to_datetime
 
-        #Customer created with a valid subscription
-        #so, update Account model
+        save_account_details(current_account, plan, @customer.id, active_until)
 
-        account = Account.find_by_email(current_user.email)
-        account.stripe_plan_id = plan
-        account.customer_id    = customer.id
-        account.active_until   = active_until
-        account.save!
+        
 
-        redirect_to :root, :notice => "Successfully subscribed to a plan"
+        redirect_to :root, :notice => "Successfully subscribed to a plan" #Plan-name
 
      rescue => e 
-        redirect_to :new_subscription, :flash => {:error => e.message }
+        redirect_to :back, :flash => {:error => e.message }
 
     end
+end
+
+def save_account_details(account, plan, customer_id, active_until)
+    #Update Account model
+    account.stripe_plan_id = plan
+    account.customer_id    = customer_id
+    account.active_until   = active_until
+    account.save!
+end
+
+#Doc
+def create_or_update_subscription(customer, current_plan, new_plan)
+    subscriptions = customer.subscriptions
+
+    #Get current subscriptions
+    current_subscription = subscriptions.data.find{ |o| o.plan.id == current_plan }
+
+    if current_subscription.blank?
+        #No current subscription
+        #Maybe the customer unsubscribed previously or the card was declined
+        #So, create a new subscription to existing customer
+        subscription = customer.subscriptions.create({:plan => new_plan })
+    else
+        #Existing subscription found
+        #Must be an upgrade or a downgrade
+        #So update eistig subscription with new plan
+        current_subscription.plan = new_plan
+        subscription = current_subscription.save
+    end
+
+    return subscription
+
+
 end
