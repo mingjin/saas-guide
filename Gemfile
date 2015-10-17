@@ -59,6 +59,9 @@ gem 'stripe'
 #For processing Stripe events
 gem 'stripe_event'
 
+#For tenantizing database
+gem 'apartment'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
