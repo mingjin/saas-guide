@@ -26,6 +26,8 @@ StripeEvent.configure do |events|
 
     #Called for any change in the subscription object
     subscription           = event.data.object
+    customer_id            = subscription.customer
+    
     account                = Account.find_by_customer_id(customer_id)
     account.stripe_plan_id = subscription.plan.id
     account.active_until   = Time.at(subscription.current_period_end).to_datetime
