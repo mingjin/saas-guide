@@ -8,6 +8,9 @@ Rails.application.routes.draw do
   post "/subscriptions/update_card_details" => "subscriptions#update_card_details"
   resources :subscriptions
 
+
+  mount StripeEvent::Engine, at: '/stripe-event' # provide a custom path
+
   root to: "home#index"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
