@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :users
+  #Devise routes with custom registrations controller
+  devise_for :users, controllers: { registrations: "registrations" }
   resources :weather_grid
 
   
