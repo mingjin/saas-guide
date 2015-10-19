@@ -3,18 +3,16 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :confirmable
-         #, 
-         #:async
+         :confirmable, :async
 
   validate :email_is_unique, on: :create
   validate :subdomain_is_unique, on: :create
   after_validation :create_tenant
   after_create :create_account
 
-  def confirmation_required?
-    false
-  end
+  # def confirmation_required?
+  #   false
+  # end
   
 
   private
@@ -48,8 +46,12 @@ class User < ActiveRecord::Base
 
   def create_tenant
     return false unless self.errors.empty?
-    
-    Apartment::Tenant.create(subdomain)
+    #If its a new record, create the tenant
+    #For Edits, do not create
+    if self.new_record?
+      Apartment::Tenant.create(subdomain)
+    end
+    #Change schema to the tenant
     Apartment::Tenant.switch!(subdomain)
   end
 
