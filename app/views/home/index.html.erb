@@ -18,4 +18,8 @@
 <% end %>
 <br>
 
+<% unless current_user.nil? %>
+    <%= link_to('Invite User', new_user_invitation_path) %>
+<% end %>
+
 <h1><%= @message %> </h1>
