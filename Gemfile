@@ -65,6 +65,9 @@ gem 'apartment'
 #For storing tenant name in sidekiq
 gem 'apartment-sidekiq'
 
+#For sending invitations to users
+gem 'devise_invitable'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
@@ -77,5 +80,8 @@ group :development, :test do
 
   #Ultrahook for forwarding stripe events
   gem 'ultrahook'
+
+  #Preview email in the browser instead of sending
+  gem "letter_opener"
 end
 
