@@ -68,6 +68,9 @@ gem 'apartment-sidekiq'
 #For sending invitations to users
 gem 'devise_invitable'
 
+#For "roles" support
+gem "rolify"
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'

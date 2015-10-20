@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  rolify
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :invitable, :database_authenticatable, :registerable,
@@ -9,6 +10,7 @@ class User < ActiveRecord::Base
   validate :subdomain_is_unique, on: :create
   after_validation :create_tenant
   after_create :create_account
+  after_create :add_role_to_user
 
   def confirmation_required?
     false
@@ -53,6 +55,15 @@ class User < ActiveRecord::Base
     end
     #Change schema to the tenant
     Apartment::Tenant.switch!(subdomain)
+  end
+
+  #Add default role to the user who signs up
+  def add_role_to_user
+    if created_by_invite?
+      add_role :app_user
+    else
+      add_role :app_admin
+    end
   end
 
 
