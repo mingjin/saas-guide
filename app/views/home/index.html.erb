@@ -14,12 +14,17 @@
     Welcome <%= current_user.email %>
     <br>
     <%= link_to('Logout', destroy_user_session_path, :method => :delete) %>
-    <%= link_to('Manage Subscriptions', subscriptions_path) %>
+    
+    <%  if can? :manage, :subscriptions %>
+        <%= link_to('Manage Subscriptions', subscriptions_path) %>
+    <% end %>
 <% end %>
 <br>
 
 <% unless current_user.nil? %>
-    <%= link_to('Invite User', new_user_invitation_path) %>
+    <% if current_user.has_role? :app_admin %>
+        <%= link_to('Invite User', new_user_invitation_path) %>    
+    <% end %>
 <% end %>
 
 <h1><%= @message %> </h1>

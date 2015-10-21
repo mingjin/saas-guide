@@ -1,5 +1,7 @@
 class SubscriptionsController < ApplicationController
+    
     before_action :authenticate_user!
+    before_action :authorize_user
 
     def new
         @plans = Plan.all
@@ -155,6 +157,13 @@ class SubscriptionsController < ApplicationController
 
         return subscription
 
+
+    end
+
+
+    #Authorize user or raise exception
+    def authorize_user
+        authorize! :manage, :subscriptions
 
     end
 end

@@ -56,6 +56,7 @@ GEM
       sass (>= 3.3.0)
     builder (3.2.2)
     byebug (6.0.2)
+    cancancan (1.10.1)
     celluloid (0.16.0)
       timers (~> 4.0.0)
     coffee-rails (4.1.0)
@@ -226,6 +227,7 @@ DEPENDENCIES
   awesome_print
   bootstrap-sass (~> 3.3.5)
   byebug
+  cancancan
   coffee-rails (~> 4.1.0)
   devise
   devise-async
