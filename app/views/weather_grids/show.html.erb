@@ -1,14 +1,31 @@
-<p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @weather_grid.name %>
-</p>
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><%= @weather_grid.name %></h3>
+        </div>
+        <br>
 
-<p>
-  <strong>User:</strong>
-  <%= @weather_grid.user %>
-</p>
 
-<%= link_to 'Edit', edit_weather_grid_path(@weather_grid) %> |
-<%= link_to 'Back', weather_grids_path %>
+        <%# Show all weather locations here  %>
+
+        <% unless @weather_info.blank? %>
+            <% @weather_info.each_with_index do |weather_info, index| %>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <%=  weather_info['location'].city %> [<%=  weather_info['location'].latitude %>, <%=  weather_info['location'].longitude %>  ]
+                            </div>
+
+                            City: <%=  weather_info['location'].city %> <br>
+                            Summary: <%=  weather_info['weather'].currently.summary %> <br>
+                            Timezone: <%=  weather_info['weather'].timezone %> <br>
+
+                        </div>
+            <% end %>
+        <% end %>
+    </div>
+</div>
+
+
+<a href="http://forecast.io">Powered by Forecast</a>
