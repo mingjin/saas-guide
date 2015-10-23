@@ -1,5 +1,6 @@
 class WeatherLocationsController < ApplicationController
   before_action :set_weather_location, only: [:show, :edit, :update, :destroy]
+  before_action :access_control, only: [:create, :update]
 
   # GET /weather_locations
   # GET /weather_locations.json
@@ -70,5 +71,18 @@ class WeatherLocationsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def weather_location_params
       params.require(:weather_location).permit(:weather_grid_id, :latitude, :longitude, :city)
+    end
+
+    def access_control
+      params = weather_location_params
+      weather_grid = WeatherGrid.find(params[:weather_grid_id])
+
+      if current_user.has_role? :app_admin
+        return true
+      end
+
+      if weather_grid.user != current_user
+        raise CanCan::AccessDenied, "Access Denied"
+      end
     end
 end

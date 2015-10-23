@@ -33,6 +33,34 @@ class Ability
 
     can :manage, :subscriptions if user.has_role? :app_admin
 
+    #app_admin can perform all operations
+    can :manage, WeatherGrid if user.has_role? :app_admin
+    can :manage, WeatherLocation if user.has_role? :app_admin
+
+
+    #app_user can only read
+    can :read, WeatherGrid if user.has_role? :app_user
+    can :read, WeatherLocation if user.has_role? :app_user
+
+    #Adding ability to create weather grid
+    can :create, WeatherGrid if user.has_role? :app_user
+
+    #Only owners can edit weather grid
+    can :update, WeatherGrid do |weather_grid|
+        weather_grid.try(:user) == user
+    end
+
+    can :delete, WeatherGrid do |weather_grid|
+        weather_grid.try(:user) == user
+    end
+
+
+
+    #Weather Locations
+    
+
+
+
 
   end
 end
