@@ -16,9 +16,24 @@
       <tr>
         <td><%= weather_grid.name %></td>
         <td><%= weather_grid.user %></td>
-        <td><%= link_to 'Show', weather_grid %></td>
-        <td><%= link_to 'Edit', edit_weather_grid_path(weather_grid) %></td>
-        <td><%= link_to 'Destroy', weather_grid, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  
+
+        <% if can? :read, WeatherGrid %>
+          <td><%= link_to 'Show', weather_grid %></td>  
+        <% end %>
+
+        <% if can? :update, weather_grid %>
+          <td><%= link_to 'Edit', edit_weather_grid_path(weather_grid) %></td>  
+        <% end %>
+
+        <% if can? :delete, weather_grid %>
+          <td><%= link_to 'Destroy', weather_grid, method: :delete, data: { confirm: 'Are you sure?' }  
+          %></td>
+        <% end %>
+
+        
+        
+         
       </tr>
     <% end %>
   </tbody>

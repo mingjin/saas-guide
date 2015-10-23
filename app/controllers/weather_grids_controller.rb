@@ -1,6 +1,7 @@
 class WeatherGridsController < ApplicationController
   require 'forecast_io'
   before_action :set_weather_grid, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource param_method: :weather_grid_params
 
   #Authentication
   before_action :authenticate_user!
@@ -8,7 +9,7 @@ class WeatherGridsController < ApplicationController
   # GET /weather_grids
   # GET /weather_grids.json
   def index
-    @weather_grids = WeatherGrid.all
+    #@weather_grids = WeatherGrid.all
   end
 
   # GET /weather_grids/1
@@ -31,7 +32,7 @@ class WeatherGridsController < ApplicationController
 
   # GET /weather_grids/new
   def new
-    @weather_grid = WeatherGrid.new
+    #@weather_grid = WeatherGrid.new
   end
 
   # GET /weather_grids/1/edit
@@ -41,7 +42,7 @@ class WeatherGridsController < ApplicationController
   # POST /weather_grids
   # POST /weather_grids.json
   def create
-    @weather_grid = WeatherGrid.new(weather_grid_params)
+    #@weather_grid = WeatherGrid.new(weather_grid_params)
 
     @weather_grid.user = current_user
 
